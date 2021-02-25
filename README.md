@@ -1,1 +1,1 @@
-# eBNB-YieldFinance
+# STASIS
