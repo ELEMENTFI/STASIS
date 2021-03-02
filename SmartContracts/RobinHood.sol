@@ -492,8 +492,8 @@ contract Robinhood is Context, IBEP20, Ownable {
      Total Supply ="10000000000";
      
  */
-    string private _name = 'rob';
-    string private _symbol = 'rtest';
+    string private _name = 'RobinHood';
+    string private _symbol = 'RBH';
     uint8 private _decimals = 9;
    	/*
 	 * RobinHood works by applying 10% fee which is 5% to each transaction & instantly splitting that fee among all holders of the token 
@@ -506,7 +506,7 @@ contract Robinhood is Context, IBEP20, Ownable {
 	 */
     uint256 private _taxFee = 5;
     uint256 private _burnFee = 4;
-    uint256 private _maxTxAmount = 25000e9;
+    uint256 private _maxTxAmount = 250000e9;
     address public treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
     uint256 public treasuryamount;
     uint256 public treasuryhundres = 100;
