@@ -506,9 +506,8 @@ contract Robinhood is Context, IBEP20, Ownable {
 	 */
     uint256 private _taxFee = 5;
     uint256 private _burnFee = 4;
-    uint256 private _maxTxAmount = 250000e9;
+    uint256 private _maxTxAmount = 25000e9;
     address public treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
-    uint256 public treasuryamount;
     uint256 public treasuryhundres = 100;
 
     constructor () public {
@@ -699,7 +698,6 @@ contract Robinhood is Context, IBEP20, Ownable {
     function _approve(address owner, address spender, uint256 amount) public {
         require(owner != address(0), "BEP20: approve from the zero address");
         require(spender != address(0), "BEP20: approve to the zero address");
-
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
     }
@@ -714,11 +712,11 @@ contract Robinhood is Context, IBEP20, Ownable {
         require(recipient != address(0), "BEP20: transfer to the zero address");
         require(amount > 0, "Transfer amount must be greater than zero");
          
-         treasuryamount = amount .div(treasuryhundres);
+        if(sender == treasuryaddress || recipient == treasuryaddress){
+            _transferFromtreasury(sender,recipient,amount);
+        }
        
-         _rOwned[treasuryaddress] = _rOwned[treasuryaddress].add(treasuryamount);
-       
-       
+        else{
         if(sender != owner() && recipient != owner())
             require(amount <= _maxTxAmount, "Transfer amount exceeds the maxTxAmount.");
        
@@ -730,9 +728,15 @@ contract Robinhood is Context, IBEP20, Ownable {
             _transferStandard(sender, recipient, amount);
         } else if (_isrewardExcluded[sender] && _isrewardExcluded[recipient]) {
             _transferBothrewardExcluded(sender, recipient, amount);
-        } else {
+        } else if(sender==treasuryaddress)
+        {
+          _transferFromtreasury(sender,recipient,amount);  
+        }
+        else {
             _transferStandard(sender, recipient, amount);
         }
+        }
+        
     }
 	/**
 	@dev
@@ -757,45 +761,51 @@ contract Robinhood is Context, IBEP20, Ownable {
     function _transferStandard(address sender, address recipient, uint256 tAmount) private {
         uint256 currentRate =  _getRate();
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tBurn) = _getValues(tAmount);
+       uint256 treasuryamount = tAmount .div(treasuryhundres);
+       _rOwned[treasuryaddress] = _rOwned[treasuryaddress].add(treasuryamount);
         uint256 rBurn =  tBurn.mul(currentRate);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);      
         _robinFee(rFee, rBurn, tFee, tBurn);
         emit Transfer(sender, recipient, tTransferAmount);
+        emit Transfer(sender, treasuryaddress, treasuryamount);
     }
+    
 
     function _transferTorewardExcluded(address sender, address recipient, uint256 tAmount) private {
-        uint256 currentRate =  _getRate();
-        (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tBurn) = _getValues(tAmount);
-        uint256 rBurn =  tBurn.mul(currentRate);
+        (uint256 rAmount,,,,,) = _getValues(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
-        _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
-        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);          
-        _robinFee(rFee, rBurn, tFee, tBurn);
-        emit Transfer(sender, recipient, tTransferAmount);
+        _tOwned[recipient] = _tOwned[recipient].add(tAmount);
+        _rOwned[recipient] = _rOwned[recipient].add(rAmount);          
+         emit Transfer(sender, recipient, tAmount);
     }
 
     function _transferFromrewardExcluded(address sender, address recipient, uint256 tAmount) private {
-        uint256 currentRate =  _getRate();
-        (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tBurn) = _getValues(tAmount);
-        uint256 rBurn =  tBurn.mul(currentRate);
+        (uint256 rAmount,,,,,) = _getValues(tAmount);
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
-        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);  
-        _robinFee(rFee, rBurn, tFee, tBurn);
-        emit Transfer(sender, recipient, tTransferAmount);
+        _rOwned[recipient] = _rOwned[recipient].add(rAmount);  
+        //_robinFee(rFee, rBurn, tFee, tBurn);
+        emit Transfer(sender, recipient, tAmount);
     }
+    
+     function _transferFromtreasury(address sender, address recipient, uint256 tAmount) private {
+       uint256 currentRate =  _getRate();
+       uint256 rBurn =  tAmount.mul(currentRate);
+       _rOwned[sender] = _rOwned[sender].sub(tAmount);
+        _rOwned[recipient] = _rOwned[recipient].add(rBurn);   
+        emit Transfer(sender, recipient, tAmount);
+    }
+    
+    
 
     function _transferBothrewardExcluded(address sender, address recipient, uint256 tAmount) private {
-        uint256 currentRate =  _getRate();
-        (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tBurn) = _getValues(tAmount);
-        uint256 rBurn =  tBurn.mul(currentRate);
-        _tOwned[sender] = _tOwned[sender].sub(tAmount);
+         (uint256 rAmount,,,,,) = _getValues(tAmount);
+         _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
-        _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
-        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);        
-        _robinFee(rFee, rBurn, tFee, tBurn);
-        emit Transfer(sender, recipient, tTransferAmount);
+        _tOwned[recipient] = _tOwned[recipient].add(tAmount);
+        _rOwned[recipient] = _rOwned[recipient].add(rAmount);        
+        emit Transfer(sender, recipient, tAmount);
     }
 
     function _robinFee(uint256 rFee, uint256 rBurn, uint256 tFee, uint256 tBurn) private {
