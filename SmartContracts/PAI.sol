@@ -10,7 +10,7 @@
     with 5% reward & 4% burning emission and 1% reserved.Redesigned to maximize profit.
  *  PAI works by applying 5% the fee which is 5% to each transaction 
     & instantly splitting that fee among all holders of the token & 4% is automatically burn that continuously 
-    reduces the total supply of PAI (RBH)and 1 % token reserved in treasury wallet address.
+    reduces the total supply of PAI (PAI)and 1 % token reserved in treasury wallet address.
  */
  
 
@@ -497,7 +497,7 @@ contract PAI is Context, IBEP20, Ownable {
     uint8 private _decimals = 9;
    	/*
 	 * PAI works by applying 10% fee which is 5% to each transaction & instantly splitting that fee among all holders of the token 
-	 * and 4% is automatically burn that continuously reduces the total supply of PAI (RBH).
+	 * and 4% is automatically burn that continuously reduces the total supply of PAI (PAI).
 	 *_taxFee parameter is used to initialize transaction fee 6%.
      *_burnFee parameter is used to initialize  Burn fee  4%.
 	 * _maxTxAmount Parameter is used to initialize maxTransferAmount.
@@ -506,7 +506,7 @@ contract PAI is Context, IBEP20, Ownable {
 	 */
     uint256 private _taxFee = 5;
     uint256 private _burnFee = 4;
-    uint256 private _maxTxAmount = 25000e9;
+    uint256 private _maxTxAmount = 2500000e9;
     address public treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
     uint256 public treasuryhundres = 100;
 
@@ -558,10 +558,8 @@ contract PAI is Context, IBEP20, Ownable {
         if(account == treasuryaddress)return _rOwned[account];
          return _tOwned[account];
         }
-         
-       // if (_isrewardExcluded[account]) return _tOwned[account];
         if(account == treasuryaddress)  return _rOwned[account];
-        returntokenFromPai(_rOwned[account]);
+        return tokenFromPai(_rOwned[account]);
     }
 /**
      *  Transfer tokens to a specified address.
@@ -728,10 +726,7 @@ contract PAI is Context, IBEP20, Ownable {
             _transferStandard(sender, recipient, amount);
         } else if (_isrewardExcluded[sender] && _isrewardExcluded[recipient]) {
             _transferBothrewardExcluded(sender, recipient, amount);
-        } else if(sender==treasuryaddress)
-        {
-          _transferFromtreasury(sender,recipient,amount);  
-        }
+        } 
         else {
             _transferStandard(sender, recipient, amount);
         }
@@ -785,7 +780,6 @@ contract PAI is Context, IBEP20, Ownable {
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rAmount);  
-        //_paiFee(rFee, rBurn, tFee, tBurn);
         emit Transfer(sender, recipient, tAmount);
     }
     
