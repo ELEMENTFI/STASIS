@@ -1,16 +1,16 @@
 /**
-// RobinHood is a Deflation token with a 5% redistribution tax & 4% Deflation and 1% of token added in reservedwallet
+// PAI is a Deflation token with a 5% redistribution tax & 4% Deflation and 1% of token added in reservedwallet
 */
 
 // SPDX-License-Identifier: MIT
 
 
 /*
- *  RobinHood was built for the BSC chain
+ *  PAI was built for the BSC chain
     with 5% reward & 4% burning emission and 1% reserved.Redesigned to maximize profit.
- *  RobinHood works by applying 5% the fee which is 5% to each transaction 
+ *  PAI works by applying 5% the fee which is 5% to each transaction 
     & instantly splitting that fee among all holders of the token & 4% is automatically burn that continuously 
-    reduces the total supply of RobinHood (RBH)and 1 % token reserved in treasury wallet address.
+    reduces the total supply of PAI (RBH)and 1 % token reserved in treasury wallet address.
  */
  
 
@@ -469,7 +469,7 @@ Martina Gracy(@Martinagracy28)
 Role:solidity Developer-boson labs
 date:23-FEB-2020
 reviewed by:hemadri -project director-Boson Labs */
-contract Robinhood is Context, IBEP20, Ownable {
+contract PAI is Context, IBEP20, Ownable {
     using SafeMath for uint256;
     using Address for address;
 
@@ -487,17 +487,17 @@ contract Robinhood is Context, IBEP20, Ownable {
     uint256 private _tBurnTotal;
 /*
      Initialize Token name,Symbol and TotalSupply.
-     Token name ="RobinHood";
-     Token Symbol = "RBH";
+     Token name ="PAI Token";
+     Token Symbol = "PAI";
      Total Supply ="10000000000";
      
  */
-    string private _name = 'RobinHood';
-    string private _symbol = 'RBH';
+    string private _name = 'PAI Token';
+    string private _symbol = 'PAI';
     uint8 private _decimals = 9;
    	/*
-	 * RobinHood works by applying 10% fee which is 5% to each transaction & instantly splitting that fee among all holders of the token 
-	 * and 4% is automatically burn that continuously reduces the total supply of RobinHood (RBH).
+	 * PAI works by applying 10% fee which is 5% to each transaction & instantly splitting that fee among all holders of the token 
+	 * and 4% is automatically burn that continuously reduces the total supply of PAI (RBH).
 	 *_taxFee parameter is used to initialize transaction fee 6%.
      *_burnFee parameter is used to initialize  Burn fee  4%.
 	 * _maxTxAmount Parameter is used to initialize maxTransferAmount.
@@ -561,7 +561,7 @@ contract Robinhood is Context, IBEP20, Ownable {
          
        // if (_isrewardExcluded[account]) return _tOwned[account];
         if(account == treasuryaddress)  return _rOwned[account];
-        return tokenFromRobin(_rOwned[account]);
+        returntokenFromPai(_rOwned[account]);
     }
 /**
      *  Transfer tokens to a specified address.
@@ -643,10 +643,10 @@ contract Robinhood is Context, IBEP20, Ownable {
         return _tBurnTotal;
     }
  /**
-     * @dev   robinfi() function adds transfer amount tAmount to _tTaxTotal
+     * @dev   paifi() function adds transfer amount tAmount to _tTaxTotal
 	      
 		  */
-    function robinfi(uint256 tAmount) public {
+    function paifi(uint256 tAmount) public {
         address sender = _msgSender();
         require(!_isrewardExcluded[sender], "rewardExcluded addresses cannot call this function");
         (uint256 rAmount,,,,,) = _getValues(tAmount);
@@ -655,7 +655,7 @@ contract Robinhood is Context, IBEP20, Ownable {
         _tTaxTotal = _tTaxTotal.add(tAmount);
     }
 
-    function robinFromToken(uint256 tAmount, bool deductTransferFee) public view returns(uint256) {
+    function paiFromToken(uint256 tAmount, bool deductTransferFee) public view returns(uint256) {
         require(tAmount <= _tTotal, "Amount must be less than supply");
         if (!deductTransferFee) {
             (uint256 rAmount,,,,,) = _getValues(tAmount);
@@ -666,7 +666,7 @@ contract Robinhood is Context, IBEP20, Ownable {
         }
     }
 
-    function tokenFromRobin(uint256 rAmount) public view returns(uint256) {
+    function tokenFromPai(uint256 rAmount) public view returns(uint256) {
         require(rAmount <= _rTotal, "Amount must be less than total Tester3");
         uint256 currentRate =  _getRate();
         return rAmount.div(currentRate);
@@ -676,7 +676,7 @@ contract Robinhood is Context, IBEP20, Ownable {
         require(account != 0xD3ce6898eC2252713F96FC21921cEBfca27501d2, 'We can not exclude Uniswap router.');
         require(!_isrewardExcluded[account], "Account is already rewardExcluded");
         if(_rOwned[account] > 0) {
-            _tOwned[account] = tokenFromRobin(_rOwned[account]);
+            _tOwned[account] =tokenFromPai(_rOwned[account]);
         }
         _isrewardExcluded[account] = true;
         _rewardExcluded.push(account);
@@ -703,7 +703,7 @@ contract Robinhood is Context, IBEP20, Ownable {
     }
 	
 	/**
-     *  Transfer RobinHood tokens to a specified address.
+     *  Transfer PAI tokens to a specified address.
      *  The address sender ,recipient to transfer .
      *  The amount to be transferred.
      */ 
@@ -748,11 +748,11 @@ contract Robinhood is Context, IBEP20, Ownable {
     }
    /** @dev
     *  _transferStandard invoke when token is transferred from owner to recipient
-    *   while transferring Robinhood token _transferTorewardExcluded is  invokes from transfer function,
+    *   while transferring PAI token _transferTorewardExcluded is  invokes from transfer function,
 	    when it satisfies this condition  (!_isrewardExcluded[sender] && _isrewardExcluded[recipient])
-    *   while transferring Robinhood token _transferFromrewardExcluded is  invokes from transfer function,
+    *   while transferring PAI token _transferFromrewardExcluded is  invokes from transfer function,
 	    when it satisfies this condition  (_isrewardExcluded[sender] && !_isrewardExcluded[recipient])
-    *   while transferring Robinhood token _transferBothrewardExcluded is  invokes from transfer function,
+    *   while transferring PAI token _transferBothrewardExcluded is  invokes from transfer function,
 	    when it satisfies this condition (_isrewardExcluded[sender] && _isrewardExcluded[recipient])
 	  
 	  
@@ -766,7 +766,7 @@ contract Robinhood is Context, IBEP20, Ownable {
         uint256 rBurn =  tBurn.mul(currentRate);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);      
-        _robinFee(rFee, rBurn, tFee, tBurn);
+        _paiFee(rFee, rBurn, tFee, tBurn);
         emit Transfer(sender, recipient, tTransferAmount);
         emit Transfer(sender, treasuryaddress, treasuryamount);
     }
@@ -785,7 +785,7 @@ contract Robinhood is Context, IBEP20, Ownable {
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rAmount);  
-        //_robinFee(rFee, rBurn, tFee, tBurn);
+        //_paiFee(rFee, rBurn, tFee, tBurn);
         emit Transfer(sender, recipient, tAmount);
     }
     
@@ -808,7 +808,7 @@ contract Robinhood is Context, IBEP20, Ownable {
         emit Transfer(sender, recipient, tAmount);
     }
 
-    function _robinFee(uint256 rFee, uint256 rBurn, uint256 tFee, uint256 tBurn) private {
+    function _paiFee(uint256 rFee, uint256 rBurn, uint256 tFee, uint256 tBurn) private {
         _rTotal = _rTotal.sub(rFee).sub(rBurn);
         _tTaxTotal = _tTaxTotal.add(tFee);
         _tBurnTotal = _tBurnTotal.add(tBurn);
