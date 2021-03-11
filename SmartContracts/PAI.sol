@@ -1,13 +1,12 @@
 /**
-// PAI is a Deflation token with a 5% redistribution tax & 4% Deflation and 1% of token added in reservedwallet
+// PAI is a Deflationary token with a 5% redistribution tax & 4% Deflation and 1% of token added to reserved wallet
 */
 
 // SPDX-License-Identifier: MIT
 
 
 /*
- *  PAI was built for the BSC chain
-    with 5% reward & 4% burning emission and 1% reserved.Redesigned to maximize profit.
+ *  This contract is  Redesigned to maximize profit.
  *  PAI works by applying 5% the fee which is 5% to each transaction 
     & instantly splitting that fee among all holders of the token & 4% is automatically burn that continuously 
     reduces the total supply of PAI (PAI)and 1 % token reserved in treasury wallet address.
@@ -496,9 +495,10 @@ contract PAI is Context, IBEP20, Ownable {
     string private _symbol = 'PAI';
     uint8 private _decimals = 9;
    	/*
-	 * PAI works by applying 10% fee which is 5% to each transaction & instantly splitting that fee among all holders of the token 
-	 * and 4% is automatically burn that continuously reduces the total supply of PAI (PAI).
-	 *_taxFee parameter is used to initialize transaction fee 6%.
+	 * PAI works by applying 10% transaction fee in which 5% is send  instantly to all token holders.
+	 * and 4% is automatically burnt which continuously reduces the total supply of PAI (PAI).
+     * and 1% is added in reserved wallet address.
+	 *_taxFee parameter is used to initialize transaction fee 5%.
      *_burnFee parameter is used to initialize  Burn fee  4%.
 	 * _maxTxAmount Parameter is used to initialize maxTransferAmount.
 	 * treasuryamount parameter is used for reserveamount 
