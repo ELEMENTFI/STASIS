@@ -7,7 +7,7 @@
 
 /*
  *  This contract is  Redesigned to maximize profit.
- *  PAI works by applying 5% the fee which is 5% to each transaction 
+ *  PAI works by applying 5% the fee which is 5% to each transaction ===================== to be changed =========================
     & instantly splitting that fee among all holders of the token & 4% is automatically burn that continuously 
     reduces the total supply of PAI (PAI)and 1 % token reserved in treasury wallet address.
  */
