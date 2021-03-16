@@ -551,8 +551,8 @@ contract PAI is Context, IBEP20, Ownable {
 	 * treasuryamount parameter is used for reserveamount 
 	 * treasuryaddress parameter initialize address of treasury wallet which contain treasury amount
 	 */
-    uint256 private _taxFee = 5;
-    uint256 private _burnFee = 4;
+    uint256 private _taxFee;
+    uint256 private _burnFee;
     uint256 private _maxTxAmount;
     address public treasuryaddress;
     uint256 public treasuryhundres;
@@ -565,7 +565,7 @@ contract PAI is Context, IBEP20, Ownable {
     _decimals = 9;
     _tTotal = 1000000 * 10**6 * 10**7; 
      _taxFee = 5;
-     
+     _burnFee = 4;
     _maxTxAmount =2500000e9 ;
     treasuryhundres = 100;
     treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
