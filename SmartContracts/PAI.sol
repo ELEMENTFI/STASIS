@@ -538,9 +538,9 @@ contract PAI is Context, IBEP20, Ownable {
      Total Supply ="10000000000";
      
  */
-    string private _name = 'PAI Token';
-    string private _symbol = 'PAI';
-    uint8 private _decimals = 9;
+    string private _name ;
+    string private _symbol;
+    uint8 private _decimals;
    	/*
 	 * PAI works by applying 10% transaction fee in which 5% is send  instantly to all token holders.
 	 * and 4% is automatically burnt which continuously reduces the total supply of PAI (PAI).
@@ -557,9 +557,16 @@ contract PAI is Context, IBEP20, Ownable {
     address public treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
     uint256 public treasuryhundres = 100;
 
-    constructor () public {
-        _rOwned[_msgSender()] = _rTotal;
-        emit Transfer(address(0), _msgSender(), _tTotal);
+     function initialize(address owner) public  initializer
+{
+    _owner = owner;
+    _name = 'Testing Token';
+    _symbol = 'Testing';
+    _decimals = 9;
+    _tTotal = 1000000 * 10**6 * 10**7; 
+    _rTotal = (MAX - (MAX % _tTotal));
+    _rOwned[_msgSender()] = _rTotal;
+     emit Transfer(address(0), _msgSender(), _tTotal);
     }
 	/**
      * @dev Returns the name of the token.
