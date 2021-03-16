@@ -553,9 +553,9 @@ contract PAI is Context, IBEP20, Ownable {
 	 */
     uint256 private _taxFee = 5;
     uint256 private _burnFee = 4;
-    uint256 private _maxTxAmount = 2500000e9;
-    address public treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
-    uint256 public treasuryhundres = 100;
+    uint256 private _maxTxAmount;
+    address public treasuryaddress;
+    uint256 public treasuryhundres;
 
      function initialize(address owner) public  initializer
 {
@@ -564,6 +564,9 @@ contract PAI is Context, IBEP20, Ownable {
     _symbol = 'Testing';
     _decimals = 9;
     _tTotal = 1000000 * 10**6 * 10**7; 
+    _maxTxAmount =2500000e9 ;
+    treasuryhundres = 100;
+    treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
     _rTotal = (MAX - (MAX % _tTotal));
     _rOwned[_msgSender()] = _rTotal;
      emit Transfer(address(0), _msgSender(), _tTotal);
