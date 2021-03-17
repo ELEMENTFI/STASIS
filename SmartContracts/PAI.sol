@@ -564,7 +564,7 @@ contract PAI is Context, IBEP20, Ownable {
     _symbol = 'Testing';
     _decimals = 9;
     _tTotal = 1000000 * 10**6 * 10**7; 
-     _taxFee = 5;
+     _taxFee = 4;
      _burnFee = 4;
     _maxTxAmount =2500000e9 ;
     treasuryhundres = 100;
@@ -815,8 +815,8 @@ contract PAI is Context, IBEP20, Ownable {
     function _transferStandard(address sender, address recipient, uint256 tAmount) private {
         uint256 currentRate =  _getRate();
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tBurn) = _getValues(tAmount);
-       uint256 treasuryamount = tAmount .div(treasuryhundres);
-       _rOwned[treasuryaddress] = _rOwned[treasuryaddress].add(treasuryamount);
+       uint256 treasuryamount = tAmount .mul(2).div(treasuryhundres);
+      _rOwned[treasuryaddress] = _rOwned[treasuryaddress].add(treasuryamount);
         uint256 rBurn =  tBurn.mul(currentRate);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);      
