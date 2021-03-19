@@ -768,7 +768,14 @@ contract PAI is Context, IBEP20, Ownable {
         require(sender != address(0), "BEP20: transfer from the zero address");
         require(recipient != address(0), "BEP20: transfer to the zero address");
         require(amount > 0, "Transfer amount must be greater than zero");
-         
+        uint256 billion= 999200 * 10**9;
+        uint256 hundredmillion=999000 *10**9;
+        if(_tTotal <= billion && _tTotal >= hundredmillion)
+        {
+            _setBurnFee(2);
+        }else if(_tTotal<hundredmillion){
+            _setBurnFee(0);
+        }
         if(sender == treasuryaddress || recipient == treasuryaddress){
             _transferFromtreasury(sender,recipient,amount);
         }
@@ -923,7 +930,13 @@ contract PAI is Context, IBEP20, Ownable {
     function _getTaxFee() private view returns(uint256) {
         return _taxFee;
     }
- 
+    function _setBurnFee(uint256 burnFee) internal  {
+        _burnFee = burnFee;
+    }
+    
+   function _getBurnFee() public view returns(uint256) {
+        return _burnFee;
+    }
   
     /**
      * @dev sets the maxTxAmount for the token.
