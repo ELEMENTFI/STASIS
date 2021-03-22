@@ -563,7 +563,9 @@ contract PAI is Context, IBEP20, Ownable {
     _name = 'Testing Token';
     _symbol = 'Testing';
     _decimals = 9;
-    _tTotal = 1000000 * 10**6 * 10**7; 
+    //for phase1 testing total supply initialized as 1000000
+     _tTotal = 100 * 10**6 * 10**7; 
+    //_tTotal = 1000000 * 10**6 * 10**7; 
     _taxFee = 4;
     _burnFee = 4;
     _maxTxAmount =2500000e9 ;
