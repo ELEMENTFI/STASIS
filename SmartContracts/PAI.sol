@@ -1,5 +1,5 @@
 /**
-// PAI is a Deflationary token with a 5% redistribution tax & 4% Deflation and 1% of token added to reserved wallet
+// PAI is a Deflationary token with a 4% redistribution tax & 4% Deflation and 2% of token added to reserved wallet
 */
 
 // SPDX-License-Identifier: MIT
@@ -7,9 +7,9 @@
 
 /*
  *  This contract is  Redesigned to maximize profit.
- *  PAI works by applying 5% the fee which is 5% to each transaction 
+ *  PAI works by applying 5% the fee which is 4% to each transaction 
     & instantly splitting that fee among all holders of the token & 4% is automatically burn that continuously 
-    reduces the total supply of PAI (PAI)and 1 % token reserved in treasury wallet address .
+    reduces the total supply of PAI (PAI)and 2 % token reserved in treasury wallet address .
  */
  
 
@@ -542,10 +542,10 @@ contract PAI is Context, IBEP20, Ownable {
     string private _symbol;
     uint8 private _decimals;
    	/*
-	 * PAI works by applying 10% transaction fee in which 5% is send  instantly to all token holders.
+	 * PAI works by applying 10% transaction fee in which 4% is send  instantly to all token holders.
 	 * and 4% is automatically burnt which continuously reduces the total supply of PAI (PAI).
-     * and 1% is added in reserved wallet address.
-	 *_taxFee parameter is used to initialize transaction fee 5%.
+     * and 2% is added in reserved wallet address.
+	 *_taxFee parameter is used to initialize transaction fee 4%.
      *_burnFee parameter is used to initialize  Burn fee  4%.
 	 * _maxTxAmount Parameter is used to initialize maxTransferAmount.
 	 * treasuryamount parameter is used for reserveamount 
@@ -563,9 +563,11 @@ contract PAI is Context, IBEP20, Ownable {
     _name = 'Testing Token';
     _symbol = 'Testing';
     _decimals = 9;
-    _tTotal = 1000000 * 10**6 * 10**7; 
-     _taxFee = 4;
-     _burnFee = 4;
+    //for phase1 testing total supply initialized as 1000000
+     _tTotal = 100 * 10**6 * 10**7; 
+    //_tTotal = 1000000 * 10**6 * 10**7; 
+    _taxFee = 4;
+    _burnFee = 4;
     _maxTxAmount =2500000e9 ;
     treasuryhundres = 100;
     treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
