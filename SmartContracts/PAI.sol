@@ -527,8 +527,8 @@ contract PAI is Context, IBEP20, Ownable {
     address[] public _rewardExcluded;
    
     uint256 private constant MAX = ~uint256(0);
-    uint256 private _tTotal = 1000000 * 10**6 * 10**7; 
-    uint256 private _rTotal = (MAX - (MAX % _tTotal));
+   // uint256 private _tTotal = 1000000 * 10**6 * 10**7; 
+    //uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tTaxTotal;
     uint256 private _tBurnTotal;
 /*
@@ -765,6 +765,7 @@ contract PAI is Context, IBEP20, Ownable {
      *  Transfer PAI tokens to a specified address.
      *  The address sender ,recipient to transfer .
      *  The amount to be transferred.
+     *  billion parameter used for initialize 1billion
      */ 
     function _transfer(address sender, address recipient, uint256 amount) private {
         require(sender != address(0), "BEP20: transfer from the zero address");
