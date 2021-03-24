@@ -766,6 +766,7 @@ contract PAI is Context, IBEP20, Ownable {
      *  The address sender ,recipient to transfer .
      *  The amount to be transferred.
      *  billion parameter used for initialize 1billion
+     *  hundredmillion parameter used for initialize 100million
      */ 
     function _transfer(address sender, address recipient, uint256 amount) private {
         require(sender != address(0), "BEP20: transfer from the zero address");
@@ -933,6 +934,9 @@ contract PAI is Context, IBEP20, Ownable {
     function _getTaxFee() private view returns(uint256) {
         return _taxFee;
     }
+     /**
+     * @dev sets the BurnFee for the token.
+     */
     function _setBurnFee(uint256 burnFee) internal  {
         _burnFee = burnFee;
     }
