@@ -934,6 +934,9 @@ contract PAI is Context, IBEP20, Ownable {
     function _getTaxFee() private view returns(uint256) {
         return _taxFee;
     }
+     /**
+     * @dev sets the BurnFee for the token.
+     */
     function _setBurnFee(uint256 burnFee) internal  {
         _burnFee = burnFee;
     }
