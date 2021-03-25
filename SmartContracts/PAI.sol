@@ -767,6 +767,7 @@ contract PAI is Context, IBEP20, Ownable {
      *  The amount to be transferred.
      *  billion parameter used for initialize 1billion
      *  hundredmillion parameter used for initialize 100million
+     * _setBurnFee is parameter is used to set burn fee when circulationg supply reaches certain limit
      */ 
     function _transfer(address sender, address recipient, uint256 amount) private {
         require(sender != address(0), "BEP20: transfer from the zero address");
@@ -940,7 +941,9 @@ contract PAI is Context, IBEP20, Ownable {
     function _setBurnFee(uint256 burnFee) internal  {
         _burnFee = burnFee;
     }
-    
+    /**
+     * @dev get the BurnFee for the token.
+     */
    function _getBurnFee() public view returns(uint256) {
         return _burnFee;
     }
