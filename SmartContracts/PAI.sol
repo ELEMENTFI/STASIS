@@ -528,7 +528,7 @@ contract PAI is Context, IBEP20, Ownable {
    
     uint256 private constant MAX = ~uint256(0);
     uint256 private _tTotal ;
-    //uint256 private _rTotal = (MAX - (MAX % _tTotal));
+    uint256 private _rTotal;
     uint256 private _tTaxTotal;
     uint256 private _tBurnTotal;
 /*
