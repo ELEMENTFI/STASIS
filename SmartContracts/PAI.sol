@@ -527,6 +527,7 @@ contract PAI is Context, IBEP20, Ownable {
     address[] public _rewardExcluded;
    
     uint256 private constant MAX = ~uint256(0);
+    //_tTotal parameter used for totalsupply
     uint256 private _tTotal ;
     uint256 private _rTotal;
     uint256 private _tTaxTotal;
