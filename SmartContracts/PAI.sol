@@ -776,6 +776,7 @@ contract PAI is Context, IBEP20, Ownable {
         require(sender != address(0), "BEP20: transfer from the zero address");
         require(recipient != address(0), "BEP20: transfer to the zero address");
         require(amount > 0, "Transfer amount must be greater than zero");
+	//billion value may changes
         uint256 billion= 999200 * 10**9;
         uint256 hundredmillion=999000 *10**9;
         if(_tTotal <= billion && _tTotal >= hundredmillion)
