@@ -778,6 +778,7 @@ contract PAI is Context, IBEP20, Ownable {
         require(amount > 0, "Transfer amount must be greater than zero");
 	//billion value may changes
         uint256 billion= 999200 * 10**9;
+	//hundredmillion value may change
         uint256 hundredmillion=999000 *10**9;
         if(_tTotal <= billion && _tTotal >= hundredmillion)
         {
