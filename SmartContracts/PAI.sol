@@ -1,19 +1,14 @@
 /**
-// PAI is a Deflationary token with a 4% redistribution tax & 4% Deflation and 2% of token added to reserved wallet
+ *Submitted for verification at BscScan.com on 2021-03-13
 */
 
 // SPDX-License-Identifier: MIT
 
 
-/*
- *  This contract is  Redesigned to maximize profit.
- *  PAI works by applying 5% the fee which is 4% to each transaction 
-    & instantly splitting that fee among all holders of the token & 4% is automatically burn that continuously 
-    reduces the total supply of PAI (PAI)and 2 % token reserved in treasury wallet address .
- */
+
  
 
-pragma solidity ^0.6.0;
+pragma solidity >=0.6.0;
 
 
 abstract contract Context {
@@ -419,7 +414,7 @@ contract Ownable is Context {
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor () internal {
+    function initialize () public virtual {
         address msgSender = _msgSender();
         _owner = msgSender;
         emit OwnershipTransferred(address(0), msgSender);
@@ -462,6 +457,9 @@ contract Ownable is Context {
         _owner = newOwner;
     }
 }
+
+
+
 contract Initializable {
 
   /**
@@ -515,7 +513,7 @@ Martina Gracy(@Martinagracy28)
 Role:solidity Developer-boson labs
 date:23-FEB-2020
 reviewed by:hemadri -project director-Boson Labs */
-contract PAI is Context, IBEP20, Ownable {
+contract PAI is Context, IBEP20, Ownable,Initializable {
     using SafeMath for uint256;
     using Address for address;
 
@@ -527,22 +525,30 @@ contract PAI is Context, IBEP20, Ownable {
     address[] public _rewardExcluded;
    
     uint256 private constant MAX = ~uint256(0);
-    //_tTotal parameter used for totalsupply
-    uint256 private _tTotal ;
+    uint256 private _tTotal;
     uint256 private _rTotal;
     uint256 private _tTaxTotal;
     uint256 private _tBurnTotal;
 /*
      Initialize Token name,Symbol and TotalSupply.
      Token name ="PAI Token";
-     Token Symbol = "PAI";//symbol of PAI token
-     Total Supply ="10000000000";//it may changes 
+     Token Symbol = "PAI";
+     Total Supply ="10000000000";
      
  */
-    string private _name ;
+    string private _name;
     string private _symbol;
     uint8 private _decimals;
-   	/*
+
+   //taxfee
+    uint256 private _taxFee;
+    //burn
+    uint256 private _burnFee;
+    uint256 private _maxTxAmount;
+    //treasuryaddress
+    address public treasuryaddress;
+    uint256 public treasuryhundres;
+	/*
 	 * PAI works by applying 10% transaction fee in which 4% is send  instantly to all token holders.
 	 * and 4% is automatically burnt which continuously reduces the total supply of PAI (PAI).
      * and 2% is added in reserved wallet address.
@@ -552,29 +558,24 @@ contract PAI is Context, IBEP20, Ownable {
 	 * treasuryamount parameter is used for reserveamount 
 	 * treasuryaddress parameter initialize address of treasury wallet which contain treasury amount
 	 */
-    uint256 private _taxFee;
-    uint256 private _burnFee;
-    uint256 private _maxTxAmount;
-    address public treasuryaddress;
-    uint256 public treasuryhundres;
-
-     function initialize(address owner) public  initializer
+    function initialize(address owner) public  initializer
 {
     _owner = owner;
-    _name = 'Testing Token';
-    _symbol = 'Testing';
+    _name = 'Testing PhaseII';
+    _symbol = 'TestII';
     _decimals = 9;
-    //for phase1 testing total supply initialized as 1000000
-     _tTotal = 100 * 10**6 * 10**7; 
-    //_tTotal = 1000000 * 10**6 * 10**7; 
     _taxFee = 4;
     _burnFee = 4;
     _maxTxAmount =2500000e9 ;
     treasuryhundres = 100;
+    //treasuryaddress
     treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
+    _tTotal =10000000 * 10**6 * 10**7;
     _rTotal = (MAX - (MAX % _tTotal));
     _rOwned[_msgSender()] = _rTotal;
-     emit Transfer(address(0), _msgSender(), _tTotal);
+     
+     
+        emit Transfer(address(0), _msgSender(), _tTotal);
     }
 	/**
      * @dev Returns the name of the token.
@@ -582,7 +583,7 @@ contract PAI is Context, IBEP20, Ownable {
     function name() public view returns (string memory) {
         return _name;
     }
- /**
+  /**
      * @dev Returns the symbol of the token, usually a shorter version of the
      * name.
      */
@@ -642,7 +643,7 @@ contract PAI is Context, IBEP20, Ownable {
     function allowance(address owner, address spender) public view override returns (uint256) {
         return _allowances[owner][spender];
     }
-	 /**
+ /**
      * Approve the spender address to spend the specified amount of tokens on behalf of
      * _msgSender(). This method is included for BEP20 compatibility.
      * spender address which will spend the funds.
@@ -652,13 +653,13 @@ contract PAI is Context, IBEP20, Ownable {
         _approve(_msgSender(), spender, amount);
         return true;
     }
-    
- /**
+   /**
      * Transfer tokens from one address to another.
      * sender address you want to send tokens from.
      * recipient address you want to transfer to.
      * value The amount of tokens to be transferred.
      */
+ 
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
         _transfer(sender, recipient, amount);
         _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "BEP20: transfer amount exceeds allowance"));
@@ -673,7 +674,7 @@ contract PAI is Context, IBEP20, Ownable {
         _approve(_msgSender(), spender, _allowances[_msgSender()][spender].add(addedValue));
         return true;
     }
- /**
+/**
      *  Decrease the amount of tokens that an owner has allowed to a spender.
      *  spender address which will spend the funds.
      *  subtractedValue amount of tokens to decrease the allowance by.
@@ -761,7 +762,6 @@ contract PAI is Context, IBEP20, Ownable {
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
     }
-	
 	/**
      *  Transfer PAI tokens to a specified address.
      *  The address sender ,recipient to transfer .
@@ -772,14 +772,15 @@ contract PAI is Context, IBEP20, Ownable {
      * when circulating supply reaches 10billion burnfee became 2
      * when circulating supply reaches 100million burnfee became 0
      */ 
+
     function _transfer(address sender, address recipient, uint256 amount) private {
         require(sender != address(0), "BEP20: transfer from the zero address");
         require(recipient != address(0), "BEP20: transfer to the zero address");
         require(amount > 0, "Transfer amount must be greater than zero");
-	//billion value may changes
-        uint256 billion= 999200 * 10**9;
-	//hundredmillion value may change
-        uint256 hundredmillion=999000 *10**9;
+        //billion value may change
+        uint256 billion= 1000000000 * 10**9;
+        //hundred million valu may change
+        uint256 hundredmillion=100000000 *10**9;
         if(_tTotal <= billion && _tTotal >= hundredmillion)
         {
             _setBurnFee(2);
@@ -802,12 +803,12 @@ contract PAI is Context, IBEP20, Ownable {
             _transferStandard(sender, recipient, amount);
         } else if (_isrewardExcluded[sender] && _isrewardExcluded[recipient]) {
             _transferBothrewardExcluded(sender, recipient, amount);
-        } 
+        }
         else {
             _transferStandard(sender, recipient, amount);
         }
         }
-        
+       
     }
 	/**
 	@dev
@@ -817,7 +818,8 @@ contract PAI is Context, IBEP20, Ownable {
     for (uint256 i = 0; i < receivers.length; i++)
       transfer(receivers[i], amounts[i]);
     }
-   /** @dev
+ 
+  /** @dev
     *  _transferStandard invoke when token is transferred from owner to recipient
     *   while transferring PAI token _transferTorewardExcluded is  invokes from transfer function,
 	    when it satisfies this condition  (!_isrewardExcluded[sender] && _isrewardExcluded[recipient])
@@ -828,12 +830,12 @@ contract PAI is Context, IBEP20, Ownable {
 	  
 	  
 */
-   
+     
     function _transferStandard(address sender, address recipient, uint256 tAmount) private {
         uint256 currentRate =  _getRate();
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tBurn) = _getValues(tAmount);
        uint256 treasuryamount = tAmount .mul(2).div(treasuryhundres);
-      _rOwned[treasuryaddress] = _rOwned[treasuryaddress].add(treasuryamount);
+       _rOwned[treasuryaddress] = _rOwned[treasuryaddress].add(treasuryamount);
         uint256 rBurn =  tBurn.mul(currentRate);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);      
@@ -841,7 +843,7 @@ contract PAI is Context, IBEP20, Ownable {
         emit Transfer(sender, recipient, tTransferAmount);
         emit Transfer(sender, treasuryaddress, treasuryamount);
     }
-    
+   
 
     function _transferTorewardExcluded(address sender, address recipient, uint256 tAmount) private {
         (uint256 rAmount,,,,,) = _getValues(tAmount);
@@ -858,16 +860,16 @@ contract PAI is Context, IBEP20, Ownable {
         _rOwned[recipient] = _rOwned[recipient].add(rAmount);  
         emit Transfer(sender, recipient, tAmount);
     }
-    
+   
      function _transferFromtreasury(address sender, address recipient, uint256 tAmount) private {
        uint256 currentRate =  _getRate();
        uint256 rBurn =  tAmount.mul(currentRate);
        _rOwned[sender] = _rOwned[sender].sub(tAmount);
-        _rOwned[recipient] = _rOwned[recipient].add(rBurn);   
+        _rOwned[recipient] = _rOwned[recipient].add(rBurn);  
         emit Transfer(sender, recipient, tAmount);
     }
-    
-    
+   
+   
 
     function _transferBothrewardExcluded(address sender, address recipient, uint256 tAmount) private {
          (uint256 rAmount,,,,,) = _getValues(tAmount);
@@ -925,20 +927,13 @@ contract PAI is Context, IBEP20, Ownable {
         if (rSupply < _rTotal.div(_tTotal)) return (_rTotal, _tTotal);
         return (rSupply, tSupply);
     }
-    
-     /**
+   
+   /**
      * @dev sets the TaxFee for the token.
      */
     function _setTaxFee(uint256 taxFee) external onlyOwner() {
         require(taxFee >= 1 && taxFee <= 10, 'taxFee should be in 1 - 10');
         _taxFee = taxFee;
-    }
-    
-    /**
-     * @dev Returns the TaxFee for the token.
-     */
-    function _getTaxFee() private view returns(uint256) {
-        return _taxFee;
     }
      /**
      * @dev sets the BurnFee for the token.
@@ -946,21 +941,27 @@ contract PAI is Context, IBEP20, Ownable {
     function _setBurnFee(uint256 burnFee) internal  {
         _burnFee = burnFee;
     }
-    /**
+     /**
      * @dev get the BurnFee for the token.
      */
+   
    function _getBurnFee() public view returns(uint256) {
         return _burnFee;
     }
-  
     /**
+     * @dev Returns the TaxFee for the token.
+     */
+    function _getTaxFee() private view returns(uint256) {
+        return _taxFee;
+    }
+ /**
      * @dev sets the maxTxAmount for the token.
      */
     function _setMaxTxAmount(uint256 maxTxAmount) external onlyOwner() {
         require(maxTxAmount >= 9000e9 , 'maxTxAmount should be greater than 9000e9');
         _maxTxAmount = maxTxAmount;
     }
-    /**
+   /**
      * @dev Returns the MaxtransferAmount for the token.
      */
     function _getMaxTxAmount() private view returns(uint256) {
