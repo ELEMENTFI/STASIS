@@ -533,7 +533,7 @@ contract PAI is Context, IBEP20, Ownable,Initializable {
      Initialize Token name,Symbol and TotalSupply.
      Token name ="PAI Token";
      Token Symbol = "PAI";
-     Total Supply ="10000000000";
+     Total Supply ="100000000000";
      
  */
     string private _name;
@@ -542,7 +542,6 @@ contract PAI is Context, IBEP20, Ownable,Initializable {
     uint256 private _taxFee;
     uint256 private _burnFee;
     uint256 private _maxTxAmount;
-    //treasuryaddress
     address public treasuryaddress;
     uint256 public treasuryhundres;
 	/*
