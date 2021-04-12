@@ -533,19 +533,15 @@ contract PAI is Context, IBEP20, Ownable,Initializable {
      Initialize Token name,Symbol and TotalSupply.
      Token name ="PAI Token";
      Token Symbol = "PAI";
-     Total Supply ="10000000000";
+     Total Supply ="100000000000";
      
  */
     string private _name;
     string private _symbol;
     uint8 private _decimals;
-
-   //taxfee
     uint256 private _taxFee;
-    //burn
     uint256 private _burnFee;
     uint256 private _maxTxAmount;
-    //treasuryaddress
     address public treasuryaddress;
     uint256 public treasuryhundres;
 	/*
@@ -568,7 +564,6 @@ contract PAI is Context, IBEP20, Ownable,Initializable {
     _burnFee = 4;
     _maxTxAmount =2500000e9 ;
     treasuryhundres = 100;
-    //treasuryaddress
     treasuryaddress = address(0x0Ef04FFA95f2eC2D07a5a196b4cEFB9d1076D43c);
     _tTotal =10000000 * 10**6 * 10**7;
     _rTotal = (MAX - (MAX % _tTotal));
@@ -777,9 +772,7 @@ contract PAI is Context, IBEP20, Ownable,Initializable {
         require(sender != address(0), "BEP20: transfer from the zero address");
         require(recipient != address(0), "BEP20: transfer to the zero address");
         require(amount > 0, "Transfer amount must be greater than zero");
-        //billion value may change
-        uint256 billion= 1000000000 * 10**9;
-        //hundred million valu may change
+         uint256 billion= 1000000000 * 10**9;
         uint256 hundredmillion=100000000 *10**9;
         if(_tTotal <= billion && _tTotal >= hundredmillion)
         {
