@@ -519,7 +519,8 @@ contract PAI is Context, IBEP20, Ownable,Initializable {
 /**
    _rOwned is a mapping from where one can find balances of accounts,
    *which are permitted for reflection tokens,, means for reward.
-   
+   _tOwned is a mapping of balances from where one can find balances of accounts,
+    *which are excluded from reflection tokens.
  */
     mapping (address => uint256) public _rOwned;
     mapping (address => uint256) public _tOwned;
