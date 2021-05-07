@@ -516,7 +516,11 @@ reviewed by:hemadri -project director-Boson Labs */
 contract PAI is Context, IBEP20, Ownable,Initializable {
     using SafeMath for uint256;
     using Address for address;
-
+/**
+   _rOwned is a mapping from where one can find balances of accounts,
+   *which are permitted for reflection tokens,, means for reward.
+   
+ */
     mapping (address => uint256) public _rOwned;
     mapping (address => uint256) public _tOwned;
     mapping (address => mapping (address => uint256)) public _allowances;
